@@ -14,37 +14,34 @@ multipass launch --name k3s-worker2 --cpus 2 --memory 8G --disk 300G --network E
 Deploy k3s on master:
 
 ```commandline
-multipass exec k3s-master -- /bin/bash -c “curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE=”644" sh -”
+ multipass exec k3s-master -- bash -c "curl -sfL https://get.k3s.io | sh -"
 ```
 
 Get the master node IP:
 
 ```commandline
-K3S_MASTERNODE_IP=”https://$(multipass info k3s-master | grep “IPv4” | awk -F’ ‘ ‘{print $2}’):6443"
+IP=$(multipass info k3s-master | grep IPv4 | awk '{print $2}')
 ```
 
 Retrieve the token:
 
 ```commandline
-TOKEN=”$(multipass exec k3s-master -- /bin/bash -c “sudo cat /var/lib/rancher/k3s/server/node-token”)”
+TOKEN=$(multipass exec k3s-master sudo cat /var/lib/rancher/k3s/server/node-token)
 ```
 
-For the 2nd node, run:
+Connect the nodes using:
 
 ```commandline
-multipass exec k3sWorkerNode1 -- /bin/bash -c “curl -sfL https://get.k3s.io | K3S_TOKEN=${TOKEN} K3S_URL=${K3S_MASTERNODE_IP} sh -”
-```
-
-and the 3rd, run:
-
-```commandline
-multipass exec k3sWorkerNode2 -- /bin/bash -c “curl -sfL https://get.k3s.io | K3S_TOKEN=${TOKEN} K3S_URL=${K3S_MASTERNODE_IP} sh -”
+for f in 1 2; do
+    multipass exec k3s-worker$f -- bash -c "curl -sfL https://get.k3s.io | K3S_URL=\"https://$IP:6443\" K3S_TOKEN=\"$TOKEN\" sh -"
+done
 ```
 
 Once all nodes are connected, will need to ensure the network is bridged with the host network. If you've not done 
 this, stop all VM instances within the Multipass UI and enable.
 
-Retrieve the public IP of the master node, then update the kubeconfig to reflect the new IP. 
+Retrieve the public IP of the master node, then update the kubeconfig to reflect the new IP. Verify connectivity and
+proceed to provisioning the PaaS infrastructure within the cluster.
 
 
 ## PaaS Installation (Helm Subcharts Combo)
