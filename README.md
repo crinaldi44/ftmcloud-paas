@@ -59,12 +59,65 @@ To manually provision without using the chart-of-charts setup (can be a headache
 component is installed in its own respective namespace:
 
 ### cert-manager
+
+```commandline
 helm repo add jetstack https://charts.jetstack.io --force-update
+```
+
+```commandline
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.16.0 \
+  --set crds.enabled=true
+```
 
 
 ### ingress-nginx
 
+```commandline
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+```
+
+```commandline
+helm install ingress-controller ingress-nginx/ingress-nginx --namespace ingress --create-namespace
+```
+
 ### longhorn
+
+```commandline
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+```
+
+```commandline
+helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace
+```
+
+To uninstall:
+
+```commandline
+kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
+helm uninstall longhorn -n longhorn-system
+kubectl delete namespace longhorn-system
+```
+
+### rancher
+```commandline
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+```
+
+```commandline
+kubectl create namespace cattle-system
+```
+
+```commandline
+helm install rancher rancher-latest/rancher \
+  --namespace cattle-system \
+  --set hostname=rancher.my.org
+```
 
 ### argocd
 TODO.
