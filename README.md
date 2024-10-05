@@ -43,6 +43,16 @@ this, stop all VM instances within the Multipass UI and enable.
 Retrieve the public IP of the master node, then update the kubeconfig to reflect the new IP. Verify connectivity and
 proceed to provisioning the PaaS infrastructure within the cluster.
 
+To get the kubeconfig, first SSH into the master node:
+
+```commandline
+multipass shell k3s-master
+```
+
+```commandline
+sudo cat /etc/rancher/k3s/k3s.yaml
+```
+
 
 ## PaaS Installation (Helm Subcharts Combo)
 First, update your kubeconfig with the file in `conf/kubeconf` using a tool like kubecm. Then,
