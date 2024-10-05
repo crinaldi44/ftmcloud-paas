@@ -1,0 +1,15 @@
+dependencies:
+- name: rancher
+  repository: https://releases.rancher.com/server-charts/stable
+  version: 2.7.1
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v1.12.0
+- name: longhorn
+  repository: https://charts.longhorn.io
+  version: 1.6.0
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.7.0
+digest: sha256:869e293505bb132831807a7ed61a5934868b735271e31d690c71e306a3138dbd
+generated: "2024-10-04T21:55:54.4837314-04:00"

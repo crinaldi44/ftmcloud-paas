@@ -1,0 +1,71 @@
+# Rancher Configuration
+rancher:
+  hostname: localhost
+  replicas: 3
+  ingress:
+    enabled: true
+    tls:
+      source: letsEncrypt  # Uses Cert-Manager to manage TLS certificates
+  letsEncrypt:
+    email: crinaldi44@gmail.com
+    environment: production  # or staging for testing
+#  extraEnv:
+#    - name: CATTLE_PROMETHEUS_METRICS
+#      value: "true"  # Enable Prometheus metrics for Rancher
+
+# Cert-Manager Configuration
+cert-manager:
+  installCRDs: true
+  ingressShim:
+    enabled: true
+  webhook:
+    enabled: true
+
+# Longhorn Configuration
+longhorn:
+  defaultSettings:
+    backupTarget: s3://your-backup-bucket/longhorn
+    backupTargetCredentialSecret: your-credential-secret
+  persistence:
+    defaultClass: true
+
+global:
+  cattle:
+    systemDefaultRegistry: ""
+
+service:
+  port: 80
+
+serviceAccount:
+  create: "true"
+
+ingress:
+  enabled: "true"
+
+autoscaling:
+  enabled: "true"
+
+image:
+  repository: ""
+
+# NGINX Ingress Controller Configuration
+ingress-nginx:
+  controller:
+    service:
+      type: LoadBalancer  # Type of service for external access
+    ingressClassResource:
+      default: true  # Makes this ingress controller the default for the cluster
+  defaultBackend:
+    enabled: true
+
+# ArgoCD Configuration
+argocd:
+  server:
+    service:
+      type: LoadBalancer  # Makes ArgoCD externally accessible
+    config:
+      url: https://argocd.example.com
+  installCRDs: true  # Automatically installs the CRDs ArgoCD requires
+  rbac:
+    policy: |
+      g, system:serviceaccount:kube-system:default, role:admin  # Customize as needed
