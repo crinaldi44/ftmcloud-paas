@@ -53,6 +53,12 @@ multipass shell k3s-master
 sudo cat /etc/rancher/k3s/k3s.yaml
 ```
 
+## Cloudflare Tunnel
+Cloudflare tunnel allows you to expose a non-public IP publicly. Cloudflared send traffic as outbound requests allowing remote connectivity using a domain.
+
+See: https://one.dash.cloudflare.com/6c1c1e976306fb6b61aa438bb63dde50/networks/connectors/cloudflare-tunnels/add/cfd_tunnel
+
+
 
 ## PaaS Installation (Helm Subcharts Combo)
 First, update your kubeconfig with the file in `conf/kubeconf` using a tool like kubecm. Then,
