@@ -1,0 +1,15 @@
+dependencies:
+- name: rancher
+  repository: https://releases.rancher.com/server-charts/latest
+  version: 2.13.1
+- name: argo-cd
+  repository: https://argoproj.github.io/argo-helm
+  version: 5.51.6
+- name: traefik
+  repository: https://traefik.github.io/charts
+  version: 32.1.0
+- name: cloudflare-tunnel
+  repository: https://cloudflare.github.io/helm-charts
+  version: 0.3.2
+digest: sha256:259dd1ec4665618bc57022f21e6610708f82353455a0732d83469b300a6a9e6b
+generated: "2025-12-29T00:31:04.604033-05:00"

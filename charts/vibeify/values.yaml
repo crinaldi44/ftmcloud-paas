@@ -121,27 +121,62 @@ rancher:
 # Argo CD subchart values
 argo-cd:
   global:
-    domain: "argocd.vibeify.co"    # <- change to your domain (e.g. argocd.vibeify.co)
+    domain: "argocd.vibeify.co"
 
+  # This part is optional once configs.params is set, but harmless:
   server:
-    # Service type for Argo CD server
     service:
       type: ClusterIP
-
-    # Enable ingress for Argo CD
     ingress:
       enabled: true
-      ingressClassName: "nginx"     # or whatever ingress class you use on OKE
+      ingressClassName: "traefik"  # or whatever you're actually using
       hosts:
-        - "argocd.vibeify.co"      # <- change to your domain
+        - "argocd.vibeify.co"
       path: /
       pathType: Prefix
-      tls:
-        - secretName: "tls-argocd"
-          hosts:
-            - "argocd.vibeify.com"
+      tls: []  # or your TLS config
 
-  # Example of making Argo CD server not require TLS internally
   configs:
     params:
+      # IMPORTANT: dotted key exactly like this
       server.insecure: "true"
+
+traefik:
+  deployment:
+    replicas: 1
+
+  ingressClass:
+    enabled: true
+    isDefaultClass: true
+    name: "traefik"
+
+  service:
+    type: ClusterIP   # important for tunnel: no cloud LB needed
+    spec:
+      ports:
+        - name: web
+          port: 80
+          targetPort: 80
+        - name: websecure
+          port: 443
+          targetPort: 443
+cloudflare-tunnel:
+  image:
+    repository: docker.io/cloudflare/cloudflared
+
+  cloudflare:
+    account: "6c1c1e976306fb6b61aa438bb63dde50"
+    tunnelName: "vibeify-tunnel"
+    tunnelId: "f03ad0dd-9a32-42bf-9179-e753603f198f"
+    secret: ""
+    secretName: "vibeify-tunnel-credentials"
+    ingress:
+
+      - hostname: rancher.vibeify.co
+        service: http://traefik.cattle-system.svc.cluster.local:80
+
+
+      - hostname: argocd.vibeify.co
+        service: http://vibeify-argocd-server.cattle-system.svc.cluster.local:80
+
+      # - service: http_status:404
