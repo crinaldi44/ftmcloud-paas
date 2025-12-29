@@ -103,6 +103,8 @@ global:
 
 # Rancher subchart values
 rancher:
+  image:
+      repository: docker.io/rancher/rancher
   hostname: "rancher.vibeify.co"   # <- change to your domain (e.g. rancher.vibeify.co)
   replicas: 1
 
