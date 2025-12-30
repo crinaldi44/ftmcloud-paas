@@ -1,0 +1,12 @@
+dependencies:
+- name: argo-cd
+  repository: https://argoproj.github.io/argo-helm
+  version: 5.51.6
+- name: traefik
+  repository: https://traefik.github.io/charts
+  version: 32.1.0
+- name: cloudflare-tunnel
+  repository: https://cloudflare.github.io/helm-charts
+  version: 0.3.2
+digest: sha256:deb8e52907f5dec500ae8bc63bf03ecb69eef296b5db11d9719c364c314dfe28
+generated: "2025-12-29T16:21:04.444243-05:00"
